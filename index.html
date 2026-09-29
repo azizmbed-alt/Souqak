@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سوقك | منصة التجار والموردين</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:Arial,Tahoma,sans-serif;
+background:#f5fbff;
+color:#123;
+line-height:1.7
+}
+header{
+background:linear-gradient(135deg,#087f8c,#00a8a8,#19b5fe);
+color:white;
+padding:18px 6%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+position:sticky;
+top:0;
+z-index:10;
+box-shadow:0 3px 15px #0002
+}
+.logo{font-size:28px;font-weight:bold}
+nav button{
+border:0;
+background:white;
+color:#087f8c;
+padding:10px 18px;
+border-radius:25px;
+cursor:pointer;
+font-weight:bold;
+margin-right:6px
+}
+.hero{
+padding:60px 7%;
+text-align:center;
+background:linear-gradient(135deg,#e8fbff,#ffffff,#fff5e8)
+}
+.hero h1{font-size:38px;color:#087f8c;margin-bottom:15px}
+.hero p{font-size:19px;color:#555;max-width:700px;margin:auto}
+.search{
+max-width:650px;
+margin:25px auto 0;
+display:flex;
+gap:8px
+}
+.search input{
+flex:1;
+padding:15px;
+border:1px solid #ddd;
+border-radius:12px;
+font-size:16px
+}
+.search button,.primary{
+background:#ff8a00;
+color:white;
+border:0;
+padding:14px 22px;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold
+}
+section{padding:35px 6%}
+h2{text-align:center;color:#087f8c;margin-bottom:25px}
+.categories{
+display:flex;
+gap:12px;
+justify-content:center;
+flex-wrap:wrap
+}
+.cat{
+background:white;
+padding:13px 22px;
+border-radius:25px;
+box-shadow:0 2px 10px #0001;
+cursor:pointer
+}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px
+}
+.card{
+background:white;
+border-radius:18px;
+padding:20px;
+box-shadow:0 3px 15px #0001
+}
+.card h3{color:#087f8c;margin-bottom:8px}
+.price{
+font-size:20px;
+font-weight:bold;
+color:#ff7a00;
+margin:10px 0
+}
+.card button{
+width:100%;
+margin-top:10px
+}
+.empty{
+text-align:center;
+padding:30px;
+color:#777
+}
+footer{
+background:#073b4c;
+color:white;
+text-align:center;
+padding:30px;
+margin-top:30px
+}
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#0008;
+z-index:20;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+.modal-box{
+background:white;
+width:100%;
+max-width:450px;
+border-radius:20px;
+padding:25px;
+max-height:90vh;
+overflow:auto
+}
+.modal-box h2{margin-bottom:15px}
+input,textarea,select{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+margin:7px 0 12px;
+font-size:15px
+}
+.close{
+float:left;
+cursor:pointer;
+font-size:25px;
+color:#777
+}
+.tabs{
+display:flex;
+gap:8px;
+margin-bottom:15px
+}
+.tabs button{
+flex:1;
+padding:10px;
+border:0;
+border-radius:10px;
+cursor:pointer
+}
+.active{background:#087f8c!important;color:white}
+.dashboard{
+display:none;
+background:#eafcff;
+padding:25px 6%
+}
+.notice{
+background:#fff3cd;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+color:#664d03
+}
+@media(max-width:600px){
+.hero h1{font-size:29px}
+.search{flex-direction:column}
+header{padding:15px 4%}
+.logo{font-size:23px}
+nav button{padding:8px 12px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">🛒 سوقك</div>
+<nav>
+<button onclick="openAuth()">دخول / تسجيل</button>
+<button onclick="logout()" id="logoutBtn" style="display:none">خروج</button>
+</nav>
+</header>
+
+<div class="hero">
+<h1>سوقك — يربطك بأفضل الموردين</h1>
+<p>
+منصة موريتانية تساعد التجار على العثور على المنتجات والموردين
+والمقارنة بين العروض بسهولة.
+</p>
+
+<div class="search">
+<input id="searchInput" placeholder="ابحث عن منتج أو مورد...">
+<button onclick="searchProducts()">بحث 🔎</button>
+</div>
+</div>
+
+<section>
+<h2>الفئات</h2>
+<div class="categories" id="categories">
+<div class="cat" onclick="filterCategory('
